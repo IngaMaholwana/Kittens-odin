@@ -1,12 +1,12 @@
 class KittensController < ApplicationController
-  before_action :set_kitten, only: %i[ show edit update destroy ]
+  before_action :set_kitten, only: %i[show edit update destroy]
 
   # GET /kittens or /kittens.json
   def index
     @kittens = Kitten.all
 
     respond_to do |f|
-      f.html { render kittens_path }
+      f.html # Automatically renders `index.html.erb`
       f.json { render json: @kittens }
     end
   end
@@ -14,7 +14,7 @@ class KittensController < ApplicationController
   # GET /kittens/1 or /kittens/1.json
   def show
     respond_to do |f|
-      f.html { render @kitten }
+      f.html # Automatically renders `show.html.erb`
       f.json { render json: @kitten }
     end
   end
@@ -67,13 +67,14 @@ class KittensController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_kitten
-      @kitten = Kitten.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def kitten_params
-      params.expect(kitten: [ :name, :age, :cuteness, :softness ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_kitten
+    @kitten = Kitten.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def kitten_params
+    params.require(:kitten).permit(:name, :age, :cuteness, :softness)
+  end
 end
